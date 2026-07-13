@@ -85,6 +85,7 @@ end)
 ```
 
 You can also pass a `delay` property to each spring individually.
+
 ```lua
 -- The first spring will start 0.1 seconds after the previous one, the second 0.2 seconds, and so on
 local springs, api = RoactSpring.useTrail(length, function(index)

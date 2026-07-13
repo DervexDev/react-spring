@@ -13,6 +13,7 @@ This is also helpful to ensure different elements that you want to animate toget
 One downside to this approach is that it's only convenient when elements are animating along a line between only 2 points. If you want to animate among arbitrary positions, using the relevant data type directly is more appropriate.
 
 ### Using different springs for each element
+
 ```lua
 local function Example(_)
     local styles, api = RoactSpring.useSpring(function()
@@ -45,6 +46,7 @@ end
 ```
 
 ### Using alpha values
+
 ```lua
 local function Example(_)
     local styles, api = RoactSpring.useSpring(function()

@@ -1,14 +1,14 @@
 {
-	"name": "react-spring-story",
-	"tree": {
-		"$className": "DataModel",
-		"ReplicatedStorage": {
-            "Packages": {
-                "$path": "Packages",
-                "ReactSpring": {
-                    "$path": "src"
-                }
-            }
-		}
-	}
+  "name": "react-spring-story",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Packages": {
+        "$path": "Packages",
+        "ReactSpring": {
+          "$path": "src"
+        }
+      }
+    }
+  }
 }

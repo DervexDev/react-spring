@@ -6,20 +6,20 @@ local Helpers = require(script.Parent.Helpers)
 local Types = require(script.Parent.Types)
 
 export type Animation = {
-	Values: {number},
-	ToValues: {number},
-	FromValues: {number},
+	Values: { number },
+	ToValues: { number },
+	FromValues: { number },
 	Type: string,
 
 	Configuration: AnimationConfiguration.SpringConfiguration,
 	Immediate: boolean?,
 
-	Velocity0: {number},
-	LastPosition: {number},
-	LastVelocity: {number},
-	Done: {boolean},
-	ElapsedTime: {number},
-	DurationProgress: {number},
+	Velocity0: { number },
+	LastPosition: { number },
+	LastVelocity: { number },
+	Done: { boolean },
+	ElapsedTime: { number },
+	DurationProgress: { number },
 
 	SetValue: (self: Animation, index: number, value: number) -> boolean,
 	MergeProperties: (self: Animation, properties: Types.Properties?) -> (),
@@ -30,11 +30,11 @@ type Static = {
 	ClassName: "Animation",
 	new: (properties: Types.Properties, key: string?) -> Animation,
 }
-type PrivateStatic = Static & {__tostring: (self: Animation) -> string}
+type PrivateStatic = Static & { __tostring: (self: Animation) -> string }
 
 local Animation = {} :: Animation & Static
 local Private = Animation :: Animation & PrivateStatic
-Animation.ClassName = "Animation";
+Animation.ClassName = "Animation"
 (Animation :: any).__index = Animation
 
 function Animation.new(properties: Types.Properties, key: string?): Animation
@@ -52,9 +52,9 @@ function Animation.new(properties: Types.Properties, key: string?): Animation
 	self.Configuration = AnimationConfiguration.MergeConfiguration(properties.Configuration or {})
 	self.Immediate = properties.Immediate :: boolean
 
-	self.Velocity0 = table.create(length, nil) :: {number}
+	self.Velocity0 = table.create(length, nil) :: { number }
 	self.LastPosition = Helpers.GetValuesFromType(from or to)
-	self.LastVelocity = table.create(length, nil) :: {number}
+	self.LastVelocity = table.create(length, nil) :: { number }
 	self.Done = table.create(length, false)
 	self.ElapsedTime = table.create(length, 0)
 	self.DurationProgress = table.create(length, 0)

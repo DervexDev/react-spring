@@ -21,7 +21,7 @@ export type AnimatableType =
 	| Vector3
 	| Vector3int16
 
-export type AnimationStyle = {[string]: AnimatableType}
+export type AnimationStyle = { [string]: AnimatableType }
 export type EasingFunction = (alpha: number) -> number
 
 export type SpringConfiguration = {
@@ -71,7 +71,7 @@ export type SpringConfiguration = {
 	--[[
 		The initial velocity of one or more values.
 	]]
-	Velocity: number | {number},
+	Velocity: number | { number },
 
 	--[[
 		The animation curve. Only used when `Duration` is defined.
@@ -164,7 +164,7 @@ export type PartialSpringConfiguration = {
 	--[[
 		The initial velocity of one or more values.
 	]]
-	Velocity: nil | number | {number},
+	Velocity: nil | number | { number },
 
 	--[[
 		The animation curve. Only used when `Duration` is defined.
@@ -220,9 +220,9 @@ export type AnimationProperties = {
 	Delay: number?,
 }
 
-export type Properties = {[string]: any}
+export type Properties = { [string]: any }
 
-type Disconnect = {Disconnect: (self: Disconnect) -> ()}
+type Disconnect = { Disconnect: (self: Disconnect) -> () }
 export type PostSimulationLike = {
 	Connect: (self: PostSimulationLike, callback: (deltaTime: number) -> ()) -> Disconnect,
 }

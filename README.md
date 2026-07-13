@@ -23,12 +23,15 @@
 ## Why roact-spring
 
 ### Declarative and imperative
+
 `roact-spring` is the perfect bridge between declarative and imperative animations. It takes the best of both worlds and packs them into one flexible library.
 
 ### Fluid, powerful, painless
+
 `roact-spring` is designed to make animations fluid, powerful, and painless to build and maintain. Animation becomes easy and approachable, and everything you do look and feel natural by default.
 
 ### Versatile
+
 `roact-spring` works with most data types and provides extensible configurations that makes it painless to create advanced animations.
 
 ## Installation
@@ -38,6 +41,7 @@
 `roact-spring` has two packages to support [react-lua](https://github.com/jsdotlua/react-lua) and [legacy Roact](https://github.com/Roblox/roact). It's crucial to install the correct package or you **will** encounter bugs. To install, add the latest version of roact-spring to your wally.toml:
 
 #### With react-lua
+
 ```console
 ReactSpring = "chriscerie/react-spring@<version>"
 ```
@@ -45,6 +49,7 @@ ReactSpring = "chriscerie/react-spring@<version>"
 Note: react-lua packages under the scope jsdotlua must use react-spring >= 2.0. react-lua packages under the legacy scope corepackages must use react-spring v1.
 
 #### With legacy Roact
+
 ```console
 RoactSpring = "chriscerie/roact-spring@<version>"
 ```
@@ -52,6 +57,7 @@ RoactSpring = "chriscerie/roact-spring@<version>"
 ### roblox-ts
 
 `roact-spring` is also available for roblox-ts projects. Install it with [npm](https://www.npmjs.com/package/@rbxts/roact-spring):
+
 ```console
 npm i @rbxts/roact-spring
 ```
@@ -61,6 +67,7 @@ npm i @rbxts/roact-spring
 Getting started with roact-spring is as simple as:
 
 ### Declarative
+
 ```lua
 local toggle, setToggle = React.useState(false)
 local styles = RoactSpring.useSpring({
@@ -122,6 +129,7 @@ These demos are publicly available. Click on each gif to go to their source.
 </a>
 
 ### Trailing elements
+
 <a href="stories/hooks/useTrailFollow.story.lua">
   <img src="https://media.giphy.com/media/BS20XRr522AJgkCyZR/giphy.gif" width="300" />
 </a>

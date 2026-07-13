@@ -32,6 +32,7 @@ end
 `roact-spring` supports both [react-lua](https://github.com/jsdotlua/react-lua) and [legacy Roact](https://github.com/Roblox/roact) with [roact-hooks](https://github.com/Kampfkarren/roact-hooks). Usage with legacy Roact and roact-hooks requires you to pass the `hooks` table to roact-spring's hooks.
 
 #### Using react-lua:
+
 ```lua
 local function App(_)
     local styles, api = RoactSpring.useSpring(function()
@@ -41,6 +42,7 @@ end
 ```
 
 #### Using legacy Roact with roact-hooks:
+
 ```lua
 local function App(_, hooks)
     local styles, api = RoactSpring.useSpring(hooks, function()
@@ -66,7 +68,7 @@ local RoactSpring = require(ReplicatedStorage.Packages.RoactSpring)
 
 function App:init()
     self.styles, self.api = RoactSpring.Controller.new({
-        transparency = 1 
+        transparency = 1
     })
 end
 
@@ -86,12 +88,12 @@ end
 
 Springs don't just handle numbers! They take the following types:
 
-* Number
-* Color3
-* Vector2
-* Vector3
-* UDim
-* UDim2
+- Number
+- Color3
+- Vector2
+- Vector3
+- UDim
+- UDim2
 
 ## Next steps
 

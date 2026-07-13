@@ -14,18 +14,18 @@ export type SpringConfiguration = Types.SpringConfiguration
 export type PartialSpringConfiguration = Types.PartialSpringConfiguration
 
 local DEFAULTS: SpringConfiguration = table.freeze(FastMerge(Constants.Config.Default, {
-	Mass = 1;
-	DampingRatio = 1;
-	Clamp = false;
-	Velocity = 0;
-	EasingFunction = Constants.EasingFunctions.Smoother;
+	Mass = 1,
+	DampingRatio = 1,
+	Clamp = false,
+	Velocity = 0,
+	EasingFunction = Constants.EasingFunctions.Smoother,
 }))
 
 function AnimationConfiguration.MergeConfiguration(configuration: any, newConfiguration: any?)
 	local trueConfiguration: SpringConfiguration = if newConfiguration
 		then FastMerge(configuration, newConfiguration)
 		else table.clone(configuration)
-	for key, value in DEFAULTS :: {[string]: any} do
+	for key, value in DEFAULTS :: { [string]: any } do
 		if trueConfiguration[key] == nil then
 			trueConfiguration[key] = value
 		end

@@ -9,35 +9,35 @@ local FastMerge = require(script.Parent.Parent.Utilities.FastMerge)
 local Types = require(script.Parent.Parent.Types)
 
 type ControllerProperties<T> = Controller.ControllerProperties<T>
-export type UseSpringsStylesList = {{[string]: React.Binding<any>}}
+export type UseSpringsStylesList = { { [string]: React.Binding<any> } }
 export type UseSpringsApi<T> = {
-	Pause: (keys: {string}?) -> (),
+	Pause: (keys: { string }?) -> (),
 	Start: (callback: (index: number) -> ControllerProperties<T>) -> Promise.Promise,
-	Stop: (keys: {string}?) -> (),
+	Stop: (keys: { string }?) -> (),
 }
 
 local Hooks = {
-	UseRef = React.useRef :: <T>(initialValue: T) -> {current: T};
+	UseRef = React.useRef :: <T>(initialValue: T) -> { current: T },
 }
 
-type UseSpringsDeclarative = <T>(length: number, properties: {T}, dependencies: {unknown}?) -> UseSpringsStylesList
+type UseSpringsDeclarative = <T>(length: number, properties: { T }, dependencies: { unknown }?) -> UseSpringsStylesList
 type UseSpringsImperative = <T>(
 	length: number,
 	properties: (Index: number) -> ControllerProperties<T>,
-	dependencies: {unknown}?
+	dependencies: { unknown }?
 ) -> (UseSpringsStylesList, UseSpringsApi<T>)
 
 export type UseSprings = UseSpringsDeclarative & UseSpringsImperative
 
 local function UseSprings<T>(
 	length: number,
-	properties: {ControllerProperties<T> | (index: number) -> ControllerProperties<T>},
-	dependencies: {unknown}?
+	properties: { ControllerProperties<T> | (index: number) -> ControllerProperties<T> },
+	dependencies: { unknown }?
 ): any
 	local isImperative = Hooks.UseRef(nil :: boolean?)
-	local controls = Hooks.UseRef({} :: {[number]: Controller.ControllerApi}).current
+	local controls = Hooks.UseRef({} :: { [number]: Controller.ControllerApi }).current
 	local useSpringsStylesList = Hooks.UseRef({} :: UseSpringsStylesList).current
-	local apiList = Hooks.UseRef({} :: {{[string]: UseSpringsApi<Types.AnimatableType>}}).current
+	local apiList = Hooks.UseRef({} :: { { [string]: UseSpringsApi<Types.AnimatableType> } }).current
 
 	if type(properties) == "table" then
 		assert(
@@ -61,10 +61,10 @@ local function UseSprings<T>(
 		if isImperative.current == false and type(properties) == "table" then
 			for index, spring in controls do
 				local startProperties = FastMerge(properties[index], {
-					Reset = not not (properties[index] :: any).Reset;
+					Reset = not not (properties[index] :: any).Reset,
 				})
 
-				spring:Start(FastMerge({Default = true}, startProperties))
+				spring:Start(FastMerge({ Default = true }, startProperties))
 			end
 		end
 	end
@@ -91,7 +91,7 @@ local function UseSprings<T>(
 				apiList[index] = nil
 			end
 		end
-	end, {length})
+	end, { length })
 
 	React.useMemo(function()
 		if isImperative.current then
@@ -99,7 +99,7 @@ local function UseSprings<T>(
 				for apiName, value in getmetatable(controls[1] :: never) do
 					if type(value) == "function" and apiName ~= "new" then
 						apiList[apiName] = function(apiProperties: any | (index: number) -> any)
-							local promises: {Promise.Promise} = {}
+							local promises: { Promise.Promise } = {}
 							local localLength = 0
 
 							for index, spring in controls do
@@ -125,7 +125,7 @@ local function UseSprings<T>(
 				end
 			end
 		end
-	end, dependencies or {{}})
+	end, dependencies or { {} })
 
 	local function stopEffect()
 		return function()

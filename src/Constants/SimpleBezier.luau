@@ -19,7 +19,7 @@ local function CreateBezier(x1: number, y1: number, x2: number, y2: number)
 		return Linear
 	end
 
-	local sampleValues: {number} = {}
+	local sampleValues: { number } = {}
 	for index = 0, 10 do
 		local indexDiv10 = index / 10
 		sampleValues[index] = (((1 - 3 * x2 + 3 * x2) * indexDiv10 + (3 * x2 - 6 * x1)) * indexDiv10 + 3 * x1)

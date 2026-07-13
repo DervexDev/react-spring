@@ -7,20 +7,22 @@ local Controller = require(script.Parent.Parent.Controller)
 local FastMerge = require(script.Parent.Parent.Utilities.FastMerge)
 local UseSprings = require(script.Parent.UseSprings)
 
-type UseTrailProperties<T> = {Controller.ControllerProperties<T>} | ((index: number) -> Controller.ControllerProperties<T>)
-local DEFAULT_DELAY = {Delay = 0.1}
+type UseTrailProperties<T> =
+	{ Controller.ControllerProperties<T> }
+	| ((index: number) -> Controller.ControllerProperties<T>)
+local DEFAULT_DELAY = { Delay = 0.1 }
 
 local Hooks = {
-	UseRef = React.useRef :: <T>(InitialValue: T) -> {current: T};
+	UseRef = React.useRef :: <T>(InitialValue: T) -> { current: T },
 }
 
-local function UseTrail<T>(length: number, properties: UseTrailProperties<T>, dependencies: {unknown}?): any
+local function UseTrail<T>(length: number, properties: UseTrailProperties<T>, dependencies: { unknown }?): any
 	local mergedProperties = React.useMemo(function()
 		if type(properties) == "function" then
 			return properties
 		end
 
-		local newProperties: {Controller.ControllerProperties<T>} = table.create(length)
+		local newProperties: { Controller.ControllerProperties<T> } = table.create(length)
 		local currentDelay = 0
 		for index, value in properties do
 			local merged = FastMerge(DEFAULT_DELAY, value) :: any
@@ -31,7 +33,7 @@ local function UseTrail<T>(length: number, properties: UseTrailProperties<T>, de
 		end
 
 		return newProperties :: any
-	end, dependencies or {{}})
+	end, dependencies or { {} })
 
 	local styles, api: UseSprings.UseSpringsApi<T>? = UseSprings(length, mergedProperties :: any, dependencies)
 	local modifiedApi = Hooks.UseRef({} :: UseSprings.UseSpringsApi<T>)

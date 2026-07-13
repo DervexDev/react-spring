@@ -46,7 +46,7 @@ local function Parallax(properties: ParallaxTypes.ParallaxProperties, reference:
 	local function scrollTo(_: number) end
 
 	local state = React.useMemo(function(): ParallaxTypes.Parallax
-		local styles, api = Controller.new({Scroll = 0})
+		local styles, api = Controller.new({ Scroll = 0 })
 		return {
 			Configuration = configuration,
 			Horizontal = horizontal,
@@ -104,31 +104,35 @@ local function Parallax(properties: ParallaxTypes.ParallaxProperties, reference:
 	scrollTo = function(offset: number)
 		state.Offset = offset
 
-		state._Api:Start({
-			Immediate = true,
-			Scroll = state.Current,
-		}):andThen(function()
-			-- DEVIATION: Chained to `andThen` because immediate currently only takes effect on the next frame
-			if syncScrollConnection.current then
-				syncScrollConnection.current:Disconnect()
-			end
-
-			local connection = RunService.PostSimulation:Connect(function()
-				setScroll(state._Styles.Scroll:GetValue())
-			end)
-
-			syncScrollConnection.current = connection
-
-			state._Api:Start({
-				Configuration = configuration,
-				Scroll = offset * state.Space,
-			}):andThen(function()
-				if syncScrollConnection.current and connection == syncScrollConnection.current then
-					connection:Disconnect()
-					syncScrollConnection.current = nil
+		state._Api
+			:Start({
+				Immediate = true,
+				Scroll = state.Current,
+			})
+			:andThen(function()
+				-- DEVIATION: Chained to `andThen` because immediate currently only takes effect on the next frame
+				if syncScrollConnection.current then
+					syncScrollConnection.current:Disconnect()
 				end
+
+				local connection = RunService.PostSimulation:Connect(function()
+					setScroll(state._Styles.Scroll:GetValue())
+				end)
+
+				syncScrollConnection.current = connection
+
+				state._Api
+					:Start({
+						Configuration = configuration,
+						Scroll = offset * state.Space,
+					})
+					:andThen(function()
+						if syncScrollConnection.current and connection == syncScrollConnection.current then
+							connection:Disconnect()
+							syncScrollConnection.current = nil
+						end
+					end)
 			end)
-		end)
 	end
 
 	local function onScroll(frame: ScrollingFrame)
@@ -173,10 +177,14 @@ local function Parallax(properties: ParallaxTypes.ParallaxProperties, reference:
 		"ScrollingFrame",
 		containerProperties,
 		ready
-			and React.createElement(React.Fragment, {}, React.createElement(ParentContext.Provider, {
-				key = "ParentProvider",
-				value = state,
-			}, children))
+			and React.createElement(
+				React.Fragment,
+				{},
+				React.createElement(ParentContext.Provider, {
+					key = "ParentProvider",
+					value = state,
+				}, children)
+			)
 	)
 end
 

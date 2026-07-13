@@ -127,7 +127,7 @@ local function ParallaxLayer(properties: ParallaxTypes.ParallaxLayerProperties, 
 	end
 	React.useEffect(updateParentEffect, {})
 
-	api:Start({Translate = 0})
+	api:Start({ Translate = 0 })
 
 	layerProperties.BackgroundTransparency = 1
 	layerProperties.Position = (if sticky then stickyTranslate else styles.Translate):map(function(value)

@@ -32,24 +32,24 @@ export type PartialSpringConfiguration = Types.PartialSpringConfiguration
 -- Check out https://react-spring-visualizer.com/
 -- Very helpful!
 local ReactSpring = table.freeze({
-	Bezier = Constants.Bezier;
-	Config = Constants.Config;
-	Configuration = Constants.Config;
-	EasingFunctions = Constants.EasingFunctions;
-	Easings = Constants.EasingFunctions;
+	Bezier = Constants.Bezier,
+	Config = Constants.Config,
+	Configuration = Constants.Config,
+	EasingFunctions = Constants.EasingFunctions,
+	Easings = Constants.EasingFunctions,
 
-	Controller = Controller;
+	Controller = Controller,
 
-	Parallax = Parallax;
-	ParallaxLayer = ParallaxLayer;
+	Parallax = Parallax,
+	ParallaxLayer = ParallaxLayer,
 
-	UseSpring = UseSpring;
-	UseSprings = UseSprings;
-	UseTrail = UseTrail;
+	UseSpring = UseSpring,
+	UseSprings = UseSprings,
+	UseTrail = UseTrail,
 
-	useSpring = UseSpring;
-	useSprings = UseSprings;
-	useTrail = UseTrail;
+	useSpring = UseSpring,
+	useSprings = UseSprings,
+	useTrail = UseTrail,
 })
 
 return ReactSpring

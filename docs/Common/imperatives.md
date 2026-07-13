@@ -63,7 +63,7 @@ The api table in the second value returned from a spring has the following funct
 
 ```lua
 local api = {
-    -- Start your animation optionally giving new props to merge 
+    -- Start your animation optionally giving new props to merge
     start: (props) => Promise,
     -- Cancel some or all animations depending on the keys passed, no keys will cancel all.
     stop: (keys) => void,

@@ -22,7 +22,7 @@ export type SpringValueProperties = {
 
 export type SpringValue = {
 	Animation: Animation.Animation,
-	DefaultProperties: {Configuration: AnimationConfiguration.SpringConfiguration?, Immediate: boolean},
+	DefaultProperties: { Configuration: AnimationConfiguration.SpringConfiguration?, Immediate: boolean },
 	OnChange: (position: Types.AnimatableType) -> (),
 	OnComplete: Signal.VoidSignal,
 	HasAnimated: boolean,
@@ -37,7 +37,7 @@ export type SpringValue = {
 type Private = {
 	Animation: Animation.Animation,
 	Connection: RBXScriptConnection?,
-	DefaultProperties: {Configuration: AnimationConfiguration.SpringConfiguration?, Immediate: boolean},
+	DefaultProperties: { Configuration: AnimationConfiguration.SpringConfiguration?, Immediate: boolean },
 	HasAnimated: boolean,
 	Key: string?,
 	MemoizedDuration: number,
@@ -59,31 +59,31 @@ type Static = {
 	ClassName: "SpringValue",
 	new: (properties: SpringValueProperties, key: string, updateEvent: Types.PostSimulationLike?) -> SpringValue,
 }
-type PrivateStatic = Static & {__tostring: (self: SpringValue) -> string}
+type PrivateStatic = Static & { __tostring: (self: SpringValue) -> string }
 
 local SpringValue = {} :: SpringValue & Static
 local Private = SpringValue :: Private & PrivateStatic
-SpringValue.ClassName = "SpringValue";
+SpringValue.ClassName = "SpringValue"
 (SpringValue :: any).__index = SpringValue
 
 function SpringValue.new(properties, key, updateEvent)
 	assert(properties.From or properties.To, "`To` or `From` expected, none passed.")
 
 	return setmetatable({
-		Animation = Animation.new(properties, key);
+		Animation = Animation.new(properties, key),
 		DefaultProperties = {
-			Configuration = properties.Configuration;
-			Immediate = if properties.Immediate ~= nil then properties.Immediate else false;
-		};
+			Configuration = properties.Configuration,
+			Immediate = if properties.Immediate ~= nil then properties.Immediate else false,
+		},
 
-		OnChange = (properties.OnChange or function() end) :: (position: Types.AnimatableType) -> ();
-		OnComplete = Signal.new() :: Signal.VoidSignal;
-		HasAnimated = false;
-		Key = nil :: string?;
-		UpdateEvent = (updateEvent or RunService.PostSimulation) :: typeof(RunService.PostSimulation);
+		OnChange = (properties.OnChange or function() end) :: (position: Types.AnimatableType) -> (),
+		OnComplete = Signal.new() :: Signal.VoidSignal,
+		HasAnimated = false,
+		Key = nil :: string?,
+		UpdateEvent = (updateEvent or RunService.PostSimulation) :: typeof(RunService.PostSimulation),
 
-		Connection = nil :: RBXScriptConnection?;
-		MemoizedDuration = 0;
+		Connection = nil :: RBXScriptConnection?,
+		MemoizedDuration = 0,
 	}, SpringValue) :: never
 end
 
@@ -100,7 +100,7 @@ local function PrepareNode(self: Private, properties: Types.Properties)
 		from = from[key]
 	end
 
-	local range = {From = from, To = to}
+	local range = { From = from, To = to }
 	if not self.HasAnimated then
 		if properties.Reverse then
 			to, from = from, to

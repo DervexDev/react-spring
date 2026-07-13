@@ -14,16 +14,16 @@ RoactSpring.useSpring({
 
 All primitives inherit the following properties (though some of them may bring their own additionally):
 
-| Property | Type | Description  |
-| ----------- | ----------- | ---- |
-| from | table | Starting values |
-| to | table | Animates to ... |
-| loop | table/fn/bool | Looping settings, see [loop prop](props#loop-prop) for more details |
-| delay | number | Delay in seconds before the animation starts |
-| immediate | boolean | Prevents animation if true |
-| [config](configs) | table | Spring config (contains mass, tension, friction, etc) |
-| reset | bool | The spring starts to animate from scratch (from -> to) if set true |
-| default | bool | Sets default value of compatible props if true. See [default props](props#default-props) for more details |
+| Property          | Type          | Description                                                                                               |
+| ----------------- | ------------- | --------------------------------------------------------------------------------------------------------- |
+| from              | table         | Starting values                                                                                           |
+| to                | table         | Animates to ...                                                                                           |
+| loop              | table/fn/bool | Looping settings, see [loop prop](props#loop-prop) for more details                                       |
+| delay             | number        | Delay in seconds before the animation starts                                                              |
+| immediate         | boolean       | Prevents animation if true                                                                                |
+| [config](configs) | table         | Spring config (contains mass, tension, friction, etc)                                                     |
+| reset             | bool          | The spring starts to animate from scratch (from -> to) if set true                                        |
+| default           | bool          | Sets default value of compatible props if true. See [default props](props#default-props) for more details |
 
 ## Advanced Props
 
@@ -111,7 +111,7 @@ local styles = RoactSpring.useSpring({
 
 ### Reset prop
 
-Use the `reset` prop to start the animation from scratch. When undefined in imperative updates, the spring will assume `reset` is true if `from` is passed. 
+Use the `reset` prop to start the animation from scratch. When undefined in imperative updates, the spring will assume `reset` is true if `from` is passed.
 
 ```lua
 local styles, api = RoactSpring.useSpring(function()
@@ -181,5 +181,5 @@ end)
 
 The following props can have default values:
 
-* `config`
-* `immediate`
+- `config`
+- `immediate`

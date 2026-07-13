@@ -1,6 +1,6 @@
 {
-	"name": "roact-spring",
-	"tree": {
-		"$path": "src"
-	}
+  "name": "roact-spring",
+  "tree": {
+    "$path": "src"
+  }
 }

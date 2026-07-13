@@ -12,7 +12,7 @@
 local Oklab = {}
 
 -- Converts a Color3 in RGB space to an array in Oklab space.
-function Oklab.To(color: Color3): {number}
+function Oklab.To(color: Color3): { number }
 	local red = color.R
 	local green = color.G
 	local blue = color.B
@@ -34,7 +34,7 @@ end
 
 -- Converts an array in CIELAB space to a Color3 in RGB space.
 -- The Color3 will be clamped by default unless specified otherwise.
-function Oklab.From(array: {number}, unclamped: boolean?): Color3
+function Oklab.From(array: { number }, unclamped: boolean?): Color3
 	local x = array[1]
 	local y = array[2]
 	local z = array[3]

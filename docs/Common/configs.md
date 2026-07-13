@@ -32,21 +32,21 @@ api.start({
 
 The following configs are available:
 
-| Property | Default | Description  |
-| ----------- | ----------- | ---- |
-| mass | 1 | spring mass |
-| tension | 170 | spring energetic load |
-| friction | 26 | spring resistance |
-| clamp | false | when true, stops the spring once it overshoots its boundaries |
-| velocity | 0 | initial velocity, see [velocity config](/docs/common/configs#velocity-config) for more details |
-| easing | t => t | linear by default, there is a multitude of easings available [here](/docs/common/configs#easings) |
-| damping | 1 | The damping ratio, which dictates how the spring slows down. Only works when `frequency` is defined. Defaults to `1`. |
-| progress | 0 | When used with `duration`, it decides how far into the easing function to start from. The duration itself is unaffected. |
-| duration | undefined | if > than 0, will switch to a duration-based animation instead of spring physics, value should be indicated in seconds (e.g. duration: 2 for a duration of 2s) |
-| frequency | undefined | The frequency response (in seconds), which dictates the duration of one period in a frictionless environment. When defined, `tension` is derived from this, and `friction` is derived from this and `damping`. |
-| bounce | undefined | When above zero, the spring will bounce instead of overshooting when exceeding its goal value. |
-| precision | undefined | How close to the end result the animated value gets before we consider it to be "there". When undefined, ideal precision will be calculated by the distance from `from` to `to` |
-| restVelocity | undefined | The smallest velocity before the animation is considered to be "not moving". When undefined, precision is used instead. |
+| Property     | Default   | Description                                                                                                                                                                                                    |
+| ------------ | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| mass         | 1         | spring mass                                                                                                                                                                                                    |
+| tension      | 170       | spring energetic load                                                                                                                                                                                          |
+| friction     | 26        | spring resistance                                                                                                                                                                                              |
+| clamp        | false     | when true, stops the spring once it overshoots its boundaries                                                                                                                                                  |
+| velocity     | 0         | initial velocity, see [velocity config](/docs/common/configs#velocity-config) for more details                                                                                                                 |
+| easing       | t => t    | linear by default, there is a multitude of easings available [here](/docs/common/configs#easings)                                                                                                              |
+| damping      | 1         | The damping ratio, which dictates how the spring slows down. Only works when `frequency` is defined. Defaults to `1`.                                                                                          |
+| progress     | 0         | When used with `duration`, it decides how far into the easing function to start from. The duration itself is unaffected.                                                                                       |
+| duration     | undefined | if > than 0, will switch to a duration-based animation instead of spring physics, value should be indicated in seconds (e.g. duration: 2 for a duration of 2s)                                                 |
+| frequency    | undefined | The frequency response (in seconds), which dictates the duration of one period in a frictionless environment. When defined, `tension` is derived from this, and `friction` is derived from this and `damping`. |
+| bounce       | undefined | When above zero, the spring will bounce instead of overshooting when exceeding its goal value.                                                                                                                 |
+| precision    | undefined | How close to the end result the animated value gets before we consider it to be "there". When undefined, ideal precision will be calculated by the distance from `from` to `to`                                |
+| restVelocity | undefined | The smallest velocity before the animation is considered to be "not moving". When undefined, precision is used instead.                                                                                        |
 
 <iframe src="https://codesandbox.io/embed/react-spring-config-x1vjb?fontsize=14&hidenavigation=1&theme=dark&view=preview"
     width="100%"

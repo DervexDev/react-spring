@@ -11,19 +11,19 @@ local Helpers = {}
 Helpers.GetValuesFromType = GetValuesFromType
 Helpers.GetTypeFromValues = GetTypeFromValues
 
-local DEFAULT_PROPERTIES = table.freeze({"Configuration", "Immediate"})
+local DEFAULT_PROPERTIES = table.freeze({ "Configuration", "Immediate" })
 local RESERVED_PROPERTIES = table.freeze({
-	Configuration = true;
-	From = true;
-	To = true;
-	Loop = true;
-	Reset = true;
-	Immediate = true;
-	Default = true;
-	Delay = true;
+	Configuration = true,
+	From = true,
+	To = true,
+	Loop = true,
+	Reset = true,
+	Immediate = true,
+	Default = true,
+	Delay = true,
 
 	-- Internal properties
-	Keys = true;
+	Keys = true,
 })
 
 function Helpers.GetDefaultProperties(properties: Types.Properties)
@@ -55,7 +55,7 @@ end
 function Helpers.InferTo(properties: Types.Properties)
 	local to = GetForwardProperties(properties)
 	if to then
-		local out = {To = to}
+		local out = { To = to }
 		for key, value in properties do
 			if not to[key] then
 				out[key] = value
@@ -68,7 +68,7 @@ function Helpers.InferTo(properties: Types.Properties)
 	return table.clone(properties)
 end
 
-local function FindDefined(values: Types.Properties, keys: {string})
+local function FindDefined(values: Types.Properties, keys: { string })
 	local length = #keys
 	for key, value in values do
 		if value and not table.find(keys, key) then
@@ -80,7 +80,7 @@ end
 
 function Helpers.CreateUpdate(properties: Types.Properties): Types.Properties
 	properties = Helpers.InferTo(properties)
-	local keys: {string} = {}
+	local keys: { string } = {}
 
 	local to = properties.To
 	if type(to) == "table" then

@@ -105,167 +105,167 @@ local function InBounce(alpha: number): number
 end
 
 local EasingFunctions = {
-	InLinear = Linear;
-	OutLinear = Linear;
-	InOutLinear = Linear;
-	OutInLinear = Linear;
-	Linear = Linear;
+	InLinear = Linear,
+	OutLinear = Linear,
+	InOutLinear = Linear,
+	OutInLinear = Linear,
+	Linear = Linear,
 
-	VanillaOut = VanillaOut;
-	VanillaIn = VanillaIn;
+	VanillaOut = VanillaOut,
+	VanillaIn = VanillaIn,
 	VanillaInOut = function(alpha: number)
 		alpha *= 2
 		return if alpha < 1 then VanillaIn(alpha) / 2 else VanillaOut(alpha) / 2
-	end;
+	end,
 	VanillaOutIn = function(alpha: number)
 		alpha *= 2
 		return if alpha < 1 then VanillaOut(alpha) / 2 else VanillaIn(alpha) / 2
-	end;
+	end,
 
-	OutSmooth = Smooth;
-	InSmooth = Smooth;
-	InOutSmooth = Smooth;
-	OutInSmooth = Smooth;
-	Smooth = Smooth;
+	OutSmooth = Smooth,
+	InSmooth = Smooth,
+	InOutSmooth = Smooth,
+	OutInSmooth = Smooth,
+	Smooth = Smooth,
 
-	OutSmoother = Smoother;
-	InSmoother = Smoother;
-	InOutSmoother = Smoother;
-	OutInSmoother = Smoother;
-	Smoother = Smoother;
+	OutSmoother = Smoother,
+	InSmoother = Smoother,
+	InOutSmoother = Smoother,
+	OutInSmoother = Smoother,
+	Smoother = Smoother,
 
-	OutRidiculousWiggle = RidiculousWiggle;
-	InRidiculousWiggle = RidiculousWiggle;
-	InOutRidiculousWiggle = RidiculousWiggle;
-	OutInRidiculousWiggle = RidiculousWiggle;
-	RidiculousWiggle = RidiculousWiggle;
+	OutRidiculousWiggle = RidiculousWiggle,
+	InRidiculousWiggle = RidiculousWiggle,
+	InOutRidiculousWiggle = RidiculousWiggle,
+	OutInRidiculousWiggle = RidiculousWiggle,
+	RidiculousWiggle = RidiculousWiggle,
 
-	OutRevBack = RevBack;
-	InRevBack = RevBack;
-	InOutRevBack = RevBack;
-	OutInRevBack = RevBack;
-	RevBack = RevBack;
+	OutRevBack = RevBack,
+	InRevBack = RevBack,
+	InOutRevBack = RevBack,
+	OutInRevBack = RevBack,
+	RevBack = RevBack,
 
-	OutSpring = Spring;
-	InSpring = Spring;
-	InOutSpring = Spring;
-	OutInSpring = Spring;
-	Spring = Spring;
+	OutSpring = Spring,
+	InSpring = Spring,
+	InOutSpring = Spring,
+	OutInSpring = Spring,
+	Spring = Spring,
 
-	OutSoftSpring = SoftSpring;
-	InSoftSpring = SoftSpring;
-	InOutSoftSpring = SoftSpring;
-	OutInSoftSpring = SoftSpring;
-	SoftSpring = SoftSpring;
+	OutSoftSpring = SoftSpring,
+	InSoftSpring = SoftSpring,
+	InOutSoftSpring = SoftSpring,
+	OutInSoftSpring = SoftSpring,
+	SoftSpring = SoftSpring,
 
-	InSharp = Sharp;
-	InOutSharp = Sharp;
-	OutSharp = Sharp;
-	OutInSharp = Sharp;
-	Sharp = Sharp;
+	InSharp = Sharp,
+	InOutSharp = Sharp,
+	OutSharp = Sharp,
+	OutInSharp = Sharp,
+	Sharp = Sharp,
 
-	InAcceleration = Acceleration;
-	InOutAcceleration = Acceleration;
-	OutAcceleration = Acceleration;
-	OutInAcceleration = Acceleration;
-	Acceleration = Acceleration;
+	InAcceleration = Acceleration,
+	InOutAcceleration = Acceleration,
+	OutAcceleration = Acceleration,
+	OutInAcceleration = Acceleration,
+	Acceleration = Acceleration,
 
-	InStandard = Standard;
-	InOutStandard = Standard;
-	OutStandard = Standard;
-	OutInStandard = Standard;
-	Standard = Standard;
+	InStandard = Standard,
+	InOutStandard = Standard,
+	OutStandard = Standard,
+	OutInStandard = Standard,
+	Standard = Standard,
 
-	InDeceleration = Deceleration;
-	InOutDeceleration = Deceleration;
-	OutDeceleration = Deceleration;
-	OutInDeceleration = Deceleration;
-	Deceleration = Deceleration;
+	InDeceleration = Deceleration,
+	InOutDeceleration = Deceleration,
+	OutDeceleration = Deceleration,
+	OutInDeceleration = Deceleration,
+	Deceleration = Deceleration,
 
-	InFabricStandard = FabricStandard;
-	InOutFabricStandard = FabricStandard;
-	OutFabricStandard = FabricStandard;
-	OutInFabricStandard = FabricStandard;
-	FabricStandard = FabricStandard;
+	InFabricStandard = FabricStandard,
+	InOutFabricStandard = FabricStandard,
+	OutFabricStandard = FabricStandard,
+	OutInFabricStandard = FabricStandard,
+	FabricStandard = FabricStandard,
 
-	InFabricAccelerate = FabricAccelerate;
-	InOutFabricAccelerate = FabricAccelerate;
-	OutFabricAccelerate = FabricAccelerate;
-	OutInFabricAccelerate = FabricAccelerate;
-	FabricAccelerate = FabricAccelerate;
+	InFabricAccelerate = FabricAccelerate,
+	InOutFabricAccelerate = FabricAccelerate,
+	OutFabricAccelerate = FabricAccelerate,
+	OutInFabricAccelerate = FabricAccelerate,
+	FabricAccelerate = FabricAccelerate,
 
-	InFabricDecelerate = FabricDecelerate;
-	InOutFabricDecelerate = FabricDecelerate;
-	OutFabricDecelerate = FabricDecelerate;
-	OutInFabricDecelerate = FabricDecelerate;
-	FabricDecelerate = FabricDecelerate;
+	InFabricDecelerate = FabricDecelerate,
+	InOutFabricDecelerate = FabricDecelerate,
+	OutFabricDecelerate = FabricDecelerate,
+	OutInFabricDecelerate = FabricDecelerate,
+	FabricDecelerate = FabricDecelerate,
 
-	InUWPAccelerate = UWPAccelerate;
-	InOutUWPAccelerate = UWPAccelerate;
-	OutUWPAccelerate = UWPAccelerate;
-	OutInUWPAccelerate = UWPAccelerate;
-	UWPAccelerate = UWPAccelerate;
+	InUWPAccelerate = UWPAccelerate,
+	InOutUWPAccelerate = UWPAccelerate,
+	OutUWPAccelerate = UWPAccelerate,
+	OutInUWPAccelerate = UWPAccelerate,
+	UWPAccelerate = UWPAccelerate,
 
-	InStandardProductive = StandardProductive;
-	InStandardExpressive = StandardExpressive;
+	InStandardProductive = StandardProductive,
+	InStandardExpressive = StandardExpressive,
 
-	InEntranceProductive = EntranceProductive;
-	InEntranceExpressive = EntranceExpressive;
+	InEntranceProductive = EntranceProductive,
+	InEntranceExpressive = EntranceExpressive,
 
-	InExitProductive = ExitProductive;
-	InExitExpressive = ExitExpressive;
+	InExitProductive = ExitProductive,
+	InExitExpressive = ExitExpressive,
 
-	OutStandardProductive = StandardProductive;
-	OutStandardExpressive = StandardExpressive;
+	OutStandardProductive = StandardProductive,
+	OutStandardExpressive = StandardExpressive,
 
-	OutEntranceProductive = EntranceProductive;
-	OutEntranceExpressive = EntranceExpressive;
+	OutEntranceProductive = EntranceProductive,
+	OutEntranceExpressive = EntranceExpressive,
 
-	OutExitProductive = ExitProductive;
-	OutExitExpressive = ExitExpressive;
+	OutExitProductive = ExitProductive,
+	OutExitExpressive = ExitExpressive,
 
-	InOutStandardProductive = StandardProductive;
-	InOutStandardExpressive = StandardExpressive;
+	InOutStandardProductive = StandardProductive,
+	InOutStandardExpressive = StandardExpressive,
 
-	InOutEntranceProductive = EntranceProductive;
-	InOutEntranceExpressive = EntranceExpressive;
+	InOutEntranceProductive = EntranceProductive,
+	InOutEntranceExpressive = EntranceExpressive,
 
-	InOutExitProductive = ExitProductive;
-	InOutExitExpressive = ExitExpressive;
+	InOutExitProductive = ExitProductive,
+	InOutExitExpressive = ExitExpressive,
 
-	OutInStandardProductive = StandardProductive;
-	OutInStandardExpressive = StandardProductive;
+	OutInStandardProductive = StandardProductive,
+	OutInStandardExpressive = StandardProductive,
 
-	OutInEntranceProductive = EntranceProductive;
-	OutInEntranceExpressive = EntranceExpressive;
+	OutInEntranceProductive = EntranceProductive,
+	OutInEntranceExpressive = EntranceExpressive,
 
-	OutInExitProductive = ExitProductive;
-	OutInExitExpressive = ExitExpressive;
+	OutInExitProductive = ExitProductive,
+	OutInExitExpressive = ExitExpressive,
 
-	EntranceExpressive = EntranceExpressive;
-	EntranceProductive = EntranceProductive;
-	ExitExpressive = ExitExpressive;
-	ExitProductive = ExitProductive;
-	StandardExpressive = StandardExpressive;
-	StandardProductive = StandardProductive;
+	EntranceExpressive = EntranceExpressive,
+	EntranceProductive = EntranceProductive,
+	ExitExpressive = ExitExpressive,
+	ExitProductive = ExitProductive,
+	StandardExpressive = StandardExpressive,
+	StandardProductive = StandardProductive,
 
-	OutMozillaCurve = MozillaCurve;
-	InMozillaCurve = MozillaCurve;
-	InOutMozillaCurve = MozillaCurve;
-	OutInMozillaCurve = MozillaCurve;
-	MozillaCurve = MozillaCurve;
+	OutMozillaCurve = MozillaCurve,
+	InMozillaCurve = MozillaCurve,
+	InOutMozillaCurve = MozillaCurve,
+	OutInMozillaCurve = MozillaCurve,
+	MozillaCurve = MozillaCurve,
 
 	InQuad = function(alpha: number)
 		return alpha * alpha
-	end;
+	end,
 
 	OutQuad = function(alpha: number)
 		return alpha * (2 - alpha)
-	end;
+	end,
 
 	InOutQuad = function(alpha: number)
 		return if alpha < 0.5 then 2 * alpha * alpha else 2 * (2 - alpha) * alpha - 1
-	end;
+	end,
 
 	OutInQuad = function(alpha: number)
 		if alpha < 0.5 then
@@ -275,16 +275,16 @@ local EasingFunctions = {
 
 		alpha = alpha * 2 - 1
 		return alpha * alpha / 2 + 0.5
-	end;
+	end,
 
 	InCubic = function(alpha: number)
 		return alpha * alpha * alpha
-	end;
+	end,
 
 	OutCubic = function(alpha: number)
 		local OneSubalpha = 1 - alpha
 		return 1 - OneSubalpha * OneSubalpha * OneSubalpha
-	end;
+	end,
 
 	InOutCubic = function(alpha: number)
 		if alpha < 0.5 then
@@ -293,7 +293,7 @@ local EasingFunctions = {
 
 		alpha -= 1
 		return 1 + 4 * alpha * alpha * alpha
-	end;
+	end,
 
 	OutInCubic = function(alpha: number)
 		if alpha < 0.5 then
@@ -303,16 +303,16 @@ local EasingFunctions = {
 
 		alpha = alpha * 2 - 1
 		return alpha * alpha * alpha / 2 + 0.5
-	end;
+	end,
 
 	InQuart = function(alpha: number)
 		return alpha * alpha * alpha * alpha
-	end;
+	end,
 
 	OutQuart = function(alpha: number)
 		alpha -= 1
 		return 1 - alpha * alpha * alpha * alpha
-	end;
+	end,
 
 	InOutQuart = function(alpha: number)
 		if alpha < 0.5 then
@@ -322,7 +322,7 @@ local EasingFunctions = {
 
 		alpha -= 1
 		return 1 - 8 * alpha * alpha * alpha * alpha
-	end;
+	end,
 
 	OutInQuart = function(alpha: number)
 		if alpha < 0.5 then
@@ -332,16 +332,16 @@ local EasingFunctions = {
 
 		alpha = alpha * 2 - 1
 		return alpha * alpha * alpha * alpha / 2 + 0.5
-	end;
+	end,
 
 	InQuint = function(alpha: number)
 		return alpha * alpha * alpha * alpha * alpha
-	end;
+	end,
 
 	OutQuint = function(alpha: number)
 		alpha -= 1
 		return alpha * alpha * alpha * alpha * alpha + 1
-	end;
+	end,
 
 	InOutQuint = function(alpha: number)
 		if alpha < 0.5 then
@@ -350,7 +350,7 @@ local EasingFunctions = {
 
 		alpha -= 1
 		return 16 * alpha * alpha * alpha * alpha * alpha + 1
-	end;
+	end,
 
 	OutInQuint = function(alpha: number)
 		if alpha < 0.5 then
@@ -360,16 +360,16 @@ local EasingFunctions = {
 
 		alpha = alpha * 2 - 1
 		return alpha * alpha * alpha * alpha * alpha / 2 + 0.5
-	end;
+	end,
 
 	InBack = function(alpha: number)
 		return alpha * alpha * (3 * alpha - 2)
-	end;
+	end,
 
 	OutBack = function(alpha: number)
 		local alphaSubOne = alpha - 1
 		return alphaSubOne * alphaSubOne * (alpha * 2 + alphaSubOne) + 1
-	end;
+	end,
 
 	InOutBack = function(alpha: number)
 		if alpha < 0.5 then
@@ -378,7 +378,7 @@ local EasingFunctions = {
 
 		local alphaSubOne = alpha - 1
 		return 1 + 2 * alphaSubOne * alphaSubOne * (2 * 3 * alpha - 2 - 2)
-	end;
+	end,
 
 	OutInBack = function(alpha: number)
 		if alpha < 0.5 then
@@ -389,34 +389,34 @@ local EasingFunctions = {
 
 		alpha = alpha * 2 - 1
 		return alpha * alpha * (3 * alpha - 2) / 2 + 0.5
-	end;
+	end,
 
 	InSine = function(alpha: number)
 		return 1 - math.cos(alpha * HALF_PI)
-	end;
+	end,
 
 	OutSine = function(alpha: number)
 		return math.sin(alpha * HALF_PI)
-	end;
+	end,
 
 	InOutSine = function(alpha: number)
 		return (1 - math.cos(PI * alpha)) / 2
-	end;
+	end,
 
 	OutInSine = function(alpha: number)
 		return if alpha < 0.5 then math.sin(alpha * PI) / 2 else (1 - math.cos((alpha * 2 - 1) * HALF_PI)) / 2 + 0.5
-	end;
+	end,
 
-	OutBounce = OutBounce;
-	InBounce = InBounce;
+	OutBounce = OutBounce,
+	InBounce = InBounce,
 
 	InOutBounce = function(alpha: number)
 		return if alpha < 0.5 then InBounce(2 * alpha) / 2 else OutBounce(2 * alpha - 1) / 2 + 0.5
-	end;
+	end,
 
 	OutInBounce = function(alpha: number)
 		return if alpha < 0.5 then OutBounce(2 * alpha) / 2 else InBounce(2 * alpha - 1) / 2 + 0.5
-	end;
+	end,
 
 	InElastic = function(alpha: number)
 		return math.exp((alpha * 0.96380736418812 - 1) * 8)
@@ -424,7 +424,7 @@ local EasingFunctions = {
 			* 0.96380736418812
 			* math.sin(4 * alpha * 0.96380736418812)
 			* 1.8752275007429
-	end;
+	end,
 
 	OutElastic = function(alpha: number)
 		return 1
@@ -435,7 +435,7 @@ local EasingFunctions = {
 					* math.sin(4 * 0.96380736418812 * (1 - alpha))
 				)
 				* 1.8752275007429
-	end;
+	end,
 
 	InOutElastic = function(alpha: number)
 		return if alpha < 0.5
@@ -450,7 +450,7 @@ local EasingFunctions = {
 						* math.sin(4 * 0.96380736418812 * (2 - 2 * alpha))
 					)
 					* 1.8752275007429
-	end;
+	end,
 
 	OutInElastic = function(alpha: number)
 		-- This isn't actually correct, but it is close enough.
@@ -478,21 +478,21 @@ local EasingFunctions = {
 		)
 				/ 2
 			+ 0.5
-	end;
+	end,
 
 	InExpo = function(alpha: number)
 		return alpha * alpha * math.exp(4 * (alpha - 1))
-	end;
+	end,
 
 	OutExpo = function(alpha: number)
 		return 1 - (1 - alpha) * (1 - alpha) / math.exp(4 * alpha)
-	end;
+	end,
 
 	InOutExpo = function(alpha: number)
 		return if alpha < 0.5
 			then 2 * alpha * alpha * math.exp(4 * (2 * alpha - 1))
 			else 1 - 2 * (alpha - 1) * (alpha - 1) * math.exp(4 * (1 - 2 * alpha))
-	end;
+	end,
 
 	OutInExpo = function(alpha: number)
 		if alpha < 0.5 then
@@ -502,16 +502,16 @@ local EasingFunctions = {
 
 		alpha = alpha * 2 - 1
 		return (alpha * alpha * math.exp(4 * (alpha - 1))) / 2 + 0.5
-	end;
+	end,
 
 	InCirc = function(alpha: number)
 		return -(math.sqrt(1 - alpha * alpha) - 1)
-	end;
+	end,
 
 	OutCirc = function(alpha: number)
 		alpha -= 1
 		return math.sqrt(1 - alpha * alpha)
-	end;
+	end,
 
 	InOutCirc = function(alpha: number)
 		alpha *= 2
@@ -521,7 +521,7 @@ local EasingFunctions = {
 
 		alpha -= 2
 		return (math.sqrt(1 - alpha * alpha) - 1) / 2
-	end;
+	end,
 
 	OutInCirc = function(alpha: number)
 		if alpha < 0.5 then
@@ -531,7 +531,7 @@ local EasingFunctions = {
 
 		alpha = alpha * 2 - 1
 		return -(math.sqrt(1 - alpha * alpha) - 1) / 2 + 0.5
-	end;
+	end,
 }
 
 return table.freeze(EasingFunctions)

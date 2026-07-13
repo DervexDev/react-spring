@@ -25,7 +25,7 @@ type AnimationType =
 	| Vector3
 	| Vector3int16
 
-local function GetTypeFromValues(typeOf: string, values: {number}): AnimationType
+local function GetTypeFromValues(typeOf: string, values: { number }): AnimationType
 	if typeOf == "number" then
 		return values[1]
 	end
