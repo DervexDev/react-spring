@@ -69,6 +69,14 @@ SpringValue.ClassName = "SpringValue"
 function SpringValue.new(properties, key, updateEvent)
 	assert(properties.from or properties.to, "`to` or `from` expected, none passed.")
 
+	if not updateEvent then
+		if RunService:IsClient() then
+			updateEvent = RunService.RenderStepped
+		else
+			updateEvent = RunService.PostSimulation
+		end
+	end
+
 	return setmetatable({
 		animation = Animation.new(properties, key),
 		defaultProperties = {
@@ -80,7 +88,7 @@ function SpringValue.new(properties, key, updateEvent)
 		onComplete = Signal.new() :: Signal.VoidSignal,
 		hasAnimated = false,
 		key = nil :: string?,
-		updateEvent = (updateEvent or RunService.PostSimulation) :: typeof(RunService.PostSimulation),
+		updateEvent = updateEvent :: typeof(RunService.PostSimulation),
 
 		connection = nil :: RBXScriptConnection?,
 		memoizedDuration = 0,
