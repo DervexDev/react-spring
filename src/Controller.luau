@@ -12,22 +12,22 @@ local Types = require(script.Parent.Types)
 export type ControllerProperties<T = any> =
 	Types.AnimationProperties
 	& ({
-		From: T?,
-		To: T?,
+		from: T?,
+		to: T?,
 	} | T)
 export type ControllerApi = {
-	Start: (self: ControllerApi, startProperties: ControllerProperties<Types.AnimationStyle>) -> Promise.Promise,
-	Stop: (self: ControllerApi, keys: { string }?) -> Promise.Promise,
-	Pause: (self: ControllerApi, keys: { string }?) -> Promise.Promise,
+	start: (self: ControllerApi, startProperties: ControllerProperties<Types.AnimationStyle>) -> Promise.Promise,
+	stop: (self: ControllerApi, keys: { string }?) -> Promise.Promise,
+	pause: (self: ControllerApi, keys: { string }?) -> Promise.Promise,
 }
 
 export type Controller<T> = {
-	Bindings: { [string]: React.Binding<any> },
-	Controls: { [string]: SpringValue.SpringValue },
+	bindings: { [string]: React.Binding<any> },
+	controls: { [string]: SpringValue.SpringValue },
 
-	Start: (self: Controller<T>, startProperties: ControllerProperties<Types.AnimationStyle>) -> Promise.Promise,
-	Stop: (self: Controller<T>, keys: { string }?) -> (),
-	Pause: (self: Controller<T>, keys: { string }?) -> (),
+	start: (self: Controller<T>, startProperties: ControllerProperties<Types.AnimationStyle>) -> Promise.Promise,
+	stop: (self: Controller<T>, keys: { string }?) -> (),
+	pause: (self: Controller<T>, keys: { string }?) -> (),
 }
 type Static = {
 	ClassName: "Controller",
@@ -42,49 +42,49 @@ Controller.ClassName = "Controller"
 
 function Controller.new<T>(properties): ({ [string]: React.Binding<any> }, Controller<T>)
 	local self: Controller<T> = setmetatable({
-		Bindings = {} :: { [string]: React.Binding<any> },
-		Controls = {} :: { [string]: SpringValue.SpringValue },
+		bindings = {} :: { [string]: React.Binding<any> },
+		controls = {} :: { [string]: SpringValue.SpringValue },
 	}, Controller) :: never
-	self:Start(FastMerge({ Default = true }, properties))
-	return self.Bindings, self
+	self:start(FastMerge({ default = true }, properties))
+	return self.bindings, self
 end
 
 local function CreateSpring(properties: ControllerProperties<Types.AnimationStyle>, key: string)
 	local spring = SpringValue.new(properties :: any, key)
 	local binding, setBinding = React.createBinding(nil :: any)
 
-	spring.Key = key
-	spring.OnChange = setBinding
+	spring.key = key
+	spring.onChange = setBinding
 
 	return spring, binding
 end
 
 local function PrepareKeys<T>(self: Controller<T>, properties: { [any]: any })
-	local keys: { string } = properties.Keys
+	local keys: { string } = properties.keys
 	if keys then
 		for _, key in keys do
-			local spring = self.Controls[key]
+			local spring = self.controls[key]
 			if not spring then
-				spring, self.Bindings[key] = CreateSpring(properties, key)
-				self.Controls[key] = spring
+				spring, self.bindings[key] = CreateSpring(properties, key)
+				self.controls[key] = spring
 			end
 
-			(spring :: any):PrepareNode(properties)
+			(spring :: any):prepareNode(properties)
 		end
 	end
 end
 
 local function FlushUpdate<T>(self: Controller<T>, properties: { [any]: any })
-	local loop = properties.Loop
-	properties.Loop = false
+	local loop = properties.loop
+	properties.loop = false
 
 	local promises: { Promise.Promise } = {}
 	local length = 0
 
-	for _, key in properties.Keys or {} do
-		local control = self.Controls[key]
+	for _, key in properties.keys or {} do
+		local control = self.controls[key]
 		length += 1
-		promises[length] = control:Start(properties)
+		promises[length] = control:start(properties)
 	end
 
 	return Promise.all(promises):andThen(function()
@@ -98,7 +98,7 @@ local function FlushUpdate<T>(self: Controller<T>, properties: { [any]: any })
 	end)
 end
 
-function Controller:Start(startProperties)
+function Controller:start(startProperties)
 	if not startProperties then
 		return Promise.new(function(resolve)
 			resolve()
@@ -110,36 +110,36 @@ function Controller:Start(startProperties)
 	return FlushUpdate(self, properties)
 end
 
-function Controller:Stop(keys)
+function Controller:stop(keys)
 	if keys then
 		for _, key in keys do
-			local control = self.Controls[key]
+			local control = self.controls[key]
 			if control then
-				control:Stop()
+				control:stop()
 			else
 				warn(`Tried to stop animation at key "{key}", but it doesn't exist.`)
 			end
 		end
 	else
-		for _, control in self.Controls do
-			control:Stop()
+		for _, control in self.controls do
+			control:stop()
 		end
 	end
 end
 
-function Controller:Pause(keys: { string }?)
+function Controller:pause(keys: { string }?)
 	if keys then
 		for _, key in keys do
-			local control = self.Controls[key]
+			local control = self.controls[key]
 			if control then
-				control:Pause()
+				control:pause()
 			else
 				warn(`Tried to pause animation at key "{key}", but it doesn't exist.`)
 			end
 		end
 	else
-		for _, control in self.Controls do
-			control:Pause()
+		for _, control in self.controls do
+			control:pause()
 		end
 	end
 end

@@ -12,47 +12,47 @@ local Helpers = require(script.Parent.Helpers)
 local Types = require(script.Parent.Types)
 
 export type SpringValueProperties = {
-	From: number,
-	To: number,
-	Delay: number?,
-	Immediate: boolean?,
-	Configuration: AnimationConfiguration.SpringConfiguration?,
-	OnChange: nil | (position: Types.AnimatableType) -> (),
+	from: number,
+	to: number,
+	delay: number?,
+	immediate: boolean?,
+	config: AnimationConfiguration.SpringConfiguration?,
+	onChange: nil | (position: Types.AnimatableType) -> (),
 }
 
 export type SpringValue = {
-	Animation: Animation.Animation,
-	DefaultProperties: { Configuration: AnimationConfiguration.SpringConfiguration?, Immediate: boolean },
-	OnChange: (position: Types.AnimatableType) -> (),
-	OnComplete: Signal.VoidSignal,
-	HasAnimated: boolean,
-	Key: string?,
-	UpdateEvent: typeof(RunService.PostSimulation),
+	animation: Animation.Animation,
+	defaultProperties: { config: AnimationConfiguration.SpringConfiguration?, immediate: boolean },
+	onChange: (position: Types.AnimatableType) -> (),
+	onComplete: Signal.VoidSignal,
+	hasAnimated: boolean,
+	key: string?,
+	updateEvent: typeof(RunService.PostSimulation),
 
-	Start: (self: SpringValue, properties: Types.Properties) -> Promise.Promise,
-	Stop: (self: SpringValue) -> (),
-	Pause: (self: SpringValue) -> (),
-	Advance: (self: SpringValue, deltaTime: number) -> (),
+	start: (self: SpringValue, properties: Types.Properties) -> Promise.Promise,
+	stop: (self: SpringValue) -> (),
+	pause: (self: SpringValue) -> (),
+	advance: (self: SpringValue, deltaTime: number) -> (),
 }
 type Private = {
-	Animation: Animation.Animation,
-	Connection: RBXScriptConnection?,
-	DefaultProperties: { Configuration: AnimationConfiguration.SpringConfiguration?, Immediate: boolean },
-	HasAnimated: boolean,
-	Key: string?,
-	MemoizedDuration: number,
-	OnChange: (position: Types.AnimatableType) -> (),
-	OnComplete: Signal.VoidSignal,
-	UpdateEvent: typeof(RunService.PostSimulation),
+	animation: Animation.Animation,
+	connection: RBXScriptConnection?,
+	defaultProperties: { config: AnimationConfiguration.SpringConfiguration?, immediate: boolean },
+	hasAnimated: boolean,
+	key: string?,
+	memoizedDuration: number,
+	onChange: (position: Types.AnimatableType) -> (),
+	onComplete: Signal.VoidSignal,
+	updateEvent: typeof(RunService.PostSimulation),
 
-	Start: (self: Private, properties: Types.Properties) -> Promise.Promise,
-	Stop: (self: Private) -> (),
-	Pause: (self: Private) -> (),
-	Advance: (self: Private, deltaTime: number) -> (),
+	start: (self: Private, properties: Types.Properties) -> Promise.Promise,
+	stop: (self: Private) -> (),
+	pause: (self: Private) -> (),
+	advance: (self: Private, deltaTime: number) -> (),
 
-	PrepareNode: (self: Private, properties: Types.Properties) -> {
-		From: unknown,
-		To: unknown,
+	prepareNode: (self: Private, properties: Types.Properties) -> {
+		from: unknown,
+		to: unknown,
 	},
 }
 type Static = {
@@ -67,30 +67,30 @@ SpringValue.ClassName = "SpringValue"
 (SpringValue :: any).__index = SpringValue
 
 function SpringValue.new(properties, key, updateEvent)
-	assert(properties.From or properties.To, "`To` or `From` expected, none passed.")
+	assert(properties.from or properties.to, "`to` or `from` expected, none passed.")
 
 	return setmetatable({
-		Animation = Animation.new(properties, key),
-		DefaultProperties = {
-			Configuration = properties.Configuration,
-			Immediate = if properties.Immediate ~= nil then properties.Immediate else false,
+		animation = Animation.new(properties, key),
+		defaultProperties = {
+			config = properties.config,
+			immediate = if properties.immediate ~= nil then properties.immediate else false,
 		},
 
-		OnChange = (properties.OnChange or function() end) :: (position: Types.AnimatableType) -> (),
-		OnComplete = Signal.new() :: Signal.VoidSignal,
-		HasAnimated = false,
-		Key = nil :: string?,
-		UpdateEvent = (updateEvent or RunService.PostSimulation) :: typeof(RunService.PostSimulation),
+		onChange = (properties.onChange or function() end) :: (position: Types.AnimatableType) -> (),
+		onComplete = Signal.new() :: Signal.VoidSignal,
+		hasAnimated = false,
+		key = nil :: string?,
+		updateEvent = (updateEvent or RunService.PostSimulation) :: typeof(RunService.PostSimulation),
 
-		Connection = nil :: RBXScriptConnection?,
-		MemoizedDuration = 0,
+		connection = nil :: RBXScriptConnection?,
+		memoizedDuration = 0,
 	}, SpringValue) :: never
 end
 
 local function PrepareNode(self: Private, properties: Types.Properties)
-	local key = self.Key or ""
-	local to = properties.To :: any
-	local from = properties.From :: any
+	local key = self.key or ""
+	local to = properties.to :: any
+	local from = properties.from :: any
 
 	if type(to) == "table" then
 		to = to[key]
@@ -100,31 +100,30 @@ local function PrepareNode(self: Private, properties: Types.Properties)
 		from = from[key]
 	end
 
-	local range = { From = from, To = to }
-	if not self.HasAnimated then
-		if properties.Reverse then
+	local range = { from = from, to = to }
+	if not self.hasAnimated then
+		if properties.reverse then
 			to, from = from, to
 		end
 
 		local values = Helpers.GetValuesFromType(from or to)
-		--self.Animation = self.Animation or Animation.new(#Values)
-		self.Animation.Values = table.clone(values)
-		self.Animation.LastPosition = table.clone(values)
-		self.OnChange(from or to)
+		self.animation.values = table.clone(values)
+		self.animation.lastPosition = table.clone(values)
+		self.onChange(from or to)
 	end
 
 	return range
 end
-Private.PrepareNode = PrepareNode
+Private.prepareNode = PrepareNode
 
 local function Update(self: Private, properties: Types.Properties)
-	if properties.Default then
-		self.DefaultProperties = FastMerge(self.DefaultProperties, Helpers.GetDefaultProperties(properties))
+	if properties.default then
+		self.defaultProperties = FastMerge(self.defaultProperties, Helpers.GetDefaultProperties(properties))
 	end
 
 	return Promise.new(function(resolve, _, onCancel)
-		if properties.Delay then
-			task.wait(properties.Delay)
+		if properties.delay then
+			task.wait(properties.delay)
 		end
 
 		if onCancel() then
@@ -132,144 +131,144 @@ local function Update(self: Private, properties: Types.Properties)
 		end
 
 		local range = PrepareNode(self, properties)
-		local from = range.From
-		local to = range.To
+		local from = range.from
+		local to = range.to
 
 		if from and not to then
 			to = from
 		end
 
-		local classAnimation = self.Animation
-		classAnimation:MergeProperties(FastMerge(self.DefaultProperties, properties))
+		local classAnimation = self.animation
+		classAnimation:mergeProperties(FastMerge(self.defaultProperties, properties))
 
-		if properties.Reverse then
-			classAnimation.ToValues, classAnimation.FromValues = classAnimation.FromValues, classAnimation.ToValues
+		if properties.reverse then
+			classAnimation.toValues, classAnimation.fromValues = classAnimation.fromValues, classAnimation.toValues
 		end
 
-		self.OnChange = properties.OnChange or self.OnChange
+		self.onChange = properties.onChange or self.onChange
 
-		local reset = if properties.Reset == nil
+		local reset = if properties.reset == nil
 			then from ~= nil
-			else classAnimation.FromValues ~= nil and properties.Reset
+			else classAnimation.fromValues ~= nil and properties.reset
 		if reset then
-			classAnimation.Values = table.clone(classAnimation.FromValues)
-			classAnimation.LastPosition = if from then Helpers.GetValuesFromType(from) else classAnimation.LastPosition
+			classAnimation.values = table.clone(classAnimation.fromValues)
+			classAnimation.lastPosition = if from then Helpers.GetValuesFromType(from) else classAnimation.lastPosition
 
-			local length = #classAnimation.Velocity0
-			classAnimation.Velocity0 = table.create(length, nil)
-			classAnimation.LastVelocity = table.create(length, nil)
+			local length = #classAnimation.velocity0
+			classAnimation.velocity0 = table.create(length, nil)
+			classAnimation.lastVelocity = table.create(length, nil)
 		end
 
-		classAnimation.ToValues = Helpers.GetValuesFromType(to)
-		classAnimation.FromValues = table.clone(classAnimation.LastPosition)
+		classAnimation.toValues = Helpers.GetValuesFromType(to)
+		classAnimation.fromValues = table.clone(classAnimation.lastPosition)
 
-		if not self.Connection then
-			self.Connection = self.UpdateEvent:Connect(function(deltaTime: number)
-				self:Advance(deltaTime)
+		if not self.connection then
+			self.connection = self.updateEvent:Connect(function(deltaTime: number)
+				self:advance(deltaTime)
 			end)
 		end
 
-		self.OnComplete:Wait()
+		self.onComplete:Wait()
 		resolve()
 	end)
 end
 
-function Private:Start(properties)
-	self.HasAnimated = true
+function Private:start(properties)
+	self.hasAnimated = true
 	return Update(self, properties)
 end
 
-function Private:Stop()
-	local connection = self.Connection
+function Private:stop()
+	local connection = self.connection
 	if connection then
 		connection:Disconnect()
-		self.Connection = nil
+		self.connection = nil
 	end
 
-	self.Animation:Stop()
+	self.animation:stop()
 end
 
-function Private:Pause()
-	local connection = self.Connection
+function Private:pause()
+	local connection = self.connection
 	if connection then
 		connection:Disconnect()
-		self.Connection = nil
+		self.connection = nil
 	end
 end
 
 -- TODO: REDUCE INDEXING PLEASEEEEEEEEEEEEE
-function Private:Advance(deltaTime: number)
+function Private:advance(deltaTime: number)
 	local changed = false
 	local idle = true
 
-	local classAnimation = self.Animation
-	local configuration = classAnimation.Configuration
-	local toValues = classAnimation.ToValues
+	local classAnimation = self.animation
+	local configuration = classAnimation.config
+	local toValues = classAnimation.toValues
 
-	for index = 1, #classAnimation.Values do
-		if classAnimation.Done[index] then
+	for index = 1, #classAnimation.values do
+		if classAnimation.done[index] then
 			continue
 		end
 
-		local finished = classAnimation.Immediate
+		local finished = classAnimation.immediate
 		local position = toValues[index]
-		local from = classAnimation.FromValues[index]
-		local to = classAnimation.ToValues[index]
+		local from = classAnimation.fromValues[index]
+		local to = classAnimation.toValues[index]
 
 		if not finished then
-			position = classAnimation.LastPosition[index]
-			if configuration.Tension <= 0 then
-				classAnimation.Done[index] = true
+			position = classAnimation.lastPosition[index]
+			if configuration.tension <= 0 then
+				classAnimation.done[index] = true
 				continue
 			end
 
-			local currentElapsedTime = classAnimation.ElapsedTime[index] + deltaTime
-			classAnimation.ElapsedTime[index] = currentElapsedTime
+			local currentElapsedTime = classAnimation.elapsedTime[index] + deltaTime
+			classAnimation.elapsedTime[index] = currentElapsedTime
 
-			local currentVelocity0 = classAnimation.Velocity0[index]
+			local currentVelocity0 = classAnimation.velocity0[index]
 			if currentVelocity0 == nil then
-				local velocity = configuration.Velocity
+				local velocity = configuration.velocity
 				if type(velocity) == "table" then
 					currentVelocity0 = velocity[index]
-					classAnimation.Velocity0[index] = currentVelocity0
+					classAnimation.velocity0[index] = currentVelocity0
 				else
 					currentVelocity0 = if to - from > 0 then velocity elseif to - from < 0 then -velocity else 0
-					classAnimation.Velocity0[index] = currentVelocity0
+					classAnimation.velocity0[index] = currentVelocity0
 				end
 			end
 
 			local velocity: number
-			local duration = configuration.Duration
+			local duration = configuration.duration
 			if duration then
 				local alpha = 1
 				if duration > 0 then
-					if self.MemoizedDuration ~= duration then
-						self.MemoizedDuration = duration
+					if self.memoizedDuration ~= duration then
+						self.memoizedDuration = duration
 
-						local durationProgress = classAnimation.DurationProgress[index]
+						local durationProgress = classAnimation.durationProgress[index]
 						if durationProgress > 0 then
 							currentElapsedTime = duration * durationProgress + deltaTime
-							classAnimation.ElapsedTime[index] = currentElapsedTime
+							classAnimation.elapsedTime[index] = currentElapsedTime
 						end
 					end
 
-					alpha = math.clamp((configuration.Progress or 0) + currentElapsedTime / self.MemoizedDuration, 0, 1)
-					classAnimation.DurationProgress[index] = alpha
+					alpha = math.clamp((configuration.progress or 0) + currentElapsedTime / self.memoizedDuration, 0, 1)
+					classAnimation.durationProgress[index] = alpha
 				end
 
-				position = from + configuration.EasingFunction(alpha) * (to - from)
-				velocity = (position - classAnimation.LastPosition[index]) / deltaTime
+				position = from + configuration.easing(alpha) * (to - from)
+				velocity = (position - classAnimation.lastPosition[index]) / deltaTime
 				finished = alpha == 1
 			else
-				velocity = classAnimation.LastVelocity[index] or currentVelocity0
+				velocity = classAnimation.lastVelocity[index] or currentVelocity0
 
 				local precision = math.max(
-					configuration.Precision or (if from == to then 0.005 else math.min(1, math.abs(to - from) / 1000)),
+					configuration.precision or (if from == to then 0.005 else math.min(1, math.abs(to - from) / 1000)),
 					0.0001
 				)
-				local restVelocity = configuration.RestVelocity or precision / 10
+				local restVelocity = configuration.restVelocity or precision / 10
 
-				local bounceFactor = if configuration.Clamp then 0 else configuration.Bounce
+				local bounceFactor = if configuration.clamp then 0 else configuration.bounce
 				local canBounce = bounceFactor ~= nil
 
 				local isGrowing = if from == to then currentVelocity0 > 0 else from < to
@@ -291,42 +290,42 @@ function Private:Advance(deltaTime: number)
 						end
 					end
 
-					local springForce = -configuration.Tension * 0.000001 * (position - to)
-					local dampingForce = -configuration.Friction * 0.001 * velocity
-					local acceleration = (springForce + dampingForce) / configuration.Mass
+					local springForce = -configuration.tension * 0.000001 * (position - to)
+					local dampingForce = -configuration.friction * 0.001 * velocity
+					local acceleration = (springForce + dampingForce) / configuration.mass
 
 					velocity += acceleration
 					position += velocity
 				end
 			end
 
-			classAnimation.LastVelocity[index] = velocity
+			classAnimation.lastVelocity[index] = velocity
 		end
 
 		if finished then
 			position = to
-			classAnimation.Done[index] = true
+			classAnimation.done[index] = true
 		else
 			idle = false
 		end
 
-		if classAnimation:SetValue(index, position) then
+		if classAnimation:setValue(index, position) then
 			changed = true
 		end
 	end
 
 	if idle then
-		self.OnChange(classAnimation:GetValue())
-		local connection = self.Connection
+		self.onChange(classAnimation:getValue())
+		local connection = self.connection
 		if connection then
 			connection:Disconnect()
-			self.Connection = nil
+			self.connection = nil
 		end
 
-		self.Animation:Stop()
-		self.OnComplete:Fire()
+		self.animation:stop()
+		self.onComplete:Fire()
 	elseif changed then
-		self.OnChange(classAnimation:GetValue())
+		self.onChange(classAnimation:getValue())
 	end
 end
 

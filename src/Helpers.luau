@@ -11,19 +11,19 @@ local Helpers = {}
 Helpers.GetValuesFromType = GetValuesFromType
 Helpers.GetTypeFromValues = GetTypeFromValues
 
-local DEFAULT_PROPERTIES = table.freeze({ "Configuration", "Immediate" })
+local DEFAULT_PROPERTIES = table.freeze({ "config", "immediate" })
 local RESERVED_PROPERTIES = table.freeze({
-	Configuration = true,
-	From = true,
-	To = true,
-	Loop = true,
-	Reset = true,
-	Immediate = true,
-	Default = true,
-	Delay = true,
+	config = true,
+	from = true,
+	to = true,
+	loop = true,
+	reset = true,
+	immediate = true,
+	default = true,
+	delay = true,
 
 	-- Internal properties
-	Keys = true,
+	keys = true,
 })
 
 function Helpers.GetDefaultProperties(properties: Types.Properties)
@@ -55,7 +55,7 @@ end
 function Helpers.InferTo(properties: Types.Properties)
 	local to = GetForwardProperties(properties)
 	if to then
-		local out = { To = to }
+		local out = { to = to }
 		for key, value in properties do
 			if not to[key] then
 				out[key] = value
@@ -82,22 +82,22 @@ function Helpers.CreateUpdate(properties: Types.Properties): Types.Properties
 	properties = Helpers.InferTo(properties)
 	local keys: { string } = {}
 
-	local to = properties.To
+	local to = properties.to
 	if type(to) == "table" then
 		FindDefined(to, keys)
 	end
 
-	local from = properties.From
+	local from = properties.from
 	if type(from) == "table" then
 		FindDefined(from, keys)
 	end
 
-	properties.Keys = keys
+	properties.keys = keys
 	return properties
 end
 
 function Helpers.CreateLoopUpdate(properties: Types.Properties, loop: unknown?): Types.Properties?
-	local trueLoop = if loop ~= nil then loop else properties.Loop
+	local trueLoop = if loop ~= nil then loop else properties.loop
 
 	local continueLoop = true
 	if type(trueLoop) == "function" then
@@ -106,14 +106,14 @@ function Helpers.CreateLoopUpdate(properties: Types.Properties, loop: unknown?):
 
 	if continueLoop then
 		local overrides = type(trueLoop) == "table" and trueLoop
-		local reset = not overrides or overrides.Reset
+		local reset = not overrides or overrides.reset
 
 		local nextProperties = table.clone(properties)
-		nextProperties.Loop = trueLoop
-		nextProperties.Default = false
-		nextProperties.Pause = nil
-		nextProperties.From = reset and properties.From
-		nextProperties.Reset = reset
+		nextProperties.loop = trueLoop
+		nextProperties.default = false
+		nextProperties.pause = nil
+		nextProperties.from = reset and properties.from
+		nextProperties.reset = reset
 
 		if type(overrides) == "table" then
 			nextProperties = FastMerge(nextProperties, overrides)

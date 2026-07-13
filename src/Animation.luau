@@ -6,25 +6,25 @@ local Helpers = require(script.Parent.Helpers)
 local Types = require(script.Parent.Types)
 
 export type Animation = {
-	Values: { number },
-	ToValues: { number },
-	FromValues: { number },
-	Type: string,
+	values: { number },
+	toValues: { number },
+	fromValues: { number },
+	type: string,
 
-	Configuration: AnimationConfiguration.SpringConfiguration,
-	Immediate: boolean?,
+	config: AnimationConfiguration.SpringConfiguration,
+	immediate: boolean?,
 
-	Velocity0: { number },
-	LastPosition: { number },
-	LastVelocity: { number },
-	Done: { boolean },
-	ElapsedTime: { number },
-	DurationProgress: { number },
+	velocity0: { number },
+	lastPosition: { number },
+	lastVelocity: { number },
+	done: { boolean },
+	elapsedTime: { number },
+	durationProgress: { number },
 
-	SetValue: (self: Animation, index: number, value: number) -> boolean,
-	MergeProperties: (self: Animation, properties: Types.Properties?) -> (),
-	GetValue: (self: Animation) -> Types.AnimatableType,
-	Stop: (self: Animation) -> (),
+	setValue: (self: Animation, index: number, value: number) -> boolean,
+	mergeProperties: (self: Animation, properties: Types.Properties?) -> (),
+	getValue: (self: Animation) -> Types.AnimatableType,
+	stop: (self: Animation) -> (),
 }
 type Static = {
 	ClassName: "Animation",
@@ -40,31 +40,31 @@ Animation.ClassName = "Animation"
 function Animation.new(properties: Types.Properties, key: string?): Animation
 	local self = setmetatable({}, Animation)
 
-	local to = properties.To and properties.To[key :: string]
-	local from = properties.From and properties.From[key :: string]
+	local to = properties.to and properties.to[key :: string]
+	local from = properties.from and properties.from[key :: string]
 	local length = #Helpers.GetValuesFromType(from or to)
 
-	self.Values = Helpers.GetValuesFromType(from or to)
-	self.ToValues = Helpers.GetValuesFromType(to or from)
-	self.FromValues = Helpers.GetValuesFromType(from or to)
-	self.Type = typeof(from or to)
+	self.values = Helpers.GetValuesFromType(from or to)
+	self.toValues = Helpers.GetValuesFromType(to or from)
+	self.fromValues = Helpers.GetValuesFromType(from or to)
+	self.type = typeof(from or to)
 
-	self.Configuration = AnimationConfiguration.MergeConfiguration(properties.Configuration or {})
-	self.Immediate = properties.Immediate :: boolean
+	self.config = AnimationConfiguration.MergeConfiguration(properties.config or {})
+	self.immediate = properties.immediate :: boolean
 
-	self.Velocity0 = table.create(length, nil) :: { number }
-	self.LastPosition = Helpers.GetValuesFromType(from or to)
-	self.LastVelocity = table.create(length, nil) :: { number }
-	self.Done = table.create(length, false)
-	self.ElapsedTime = table.create(length, 0)
-	self.DurationProgress = table.create(length, 0)
+	self.velocity0 = table.create(length, nil) :: { number }
+	self.lastPosition = Helpers.GetValuesFromType(from or to)
+	self.lastVelocity = table.create(length, nil) :: { number }
+	self.done = table.create(length, false)
+	self.elapsedTime = table.create(length, 0)
+	self.durationProgress = table.create(length, 0)
 
 	return self :: never
 end
 
-function Animation:SetValue(index: number, value: number)
-	self.LastPosition[index] = value
-	local values = self.Values
+function Animation:setValue(index: number, value: number)
+	self.lastPosition[index] = value
+	local values = self.values
 	if values[index] == value then
 		return false
 	end
@@ -73,27 +73,27 @@ function Animation:SetValue(index: number, value: number)
 	return true
 end
 
-function Animation:MergeProperties(properties: Types.Properties?)
+function Animation:mergeProperties(properties: Types.Properties?)
 	if properties then
-		self.Configuration = AnimationConfiguration.MergeConfiguration(properties.Configuration or {})
-		self.Immediate = if properties.Immediate ~= nil then properties.Immediate else self.Immediate
+		self.config = AnimationConfiguration.MergeConfiguration(properties.config or {})
+		self.immediate = if properties.immediate ~= nil then properties.immediate else self.immediate
 
-		local length = #self.Values
-		self.Done = table.create(length, false)
-		self.ElapsedTime = table.create(length, 0)
-		self.DurationProgress = table.create(length, 0)
+		local length = #self.values
+		self.done = table.create(length, false)
+		self.elapsedTime = table.create(length, 0)
+		self.durationProgress = table.create(length, 0)
 	end
 end
 
-function Animation:GetValue(): Types.AnimatableType
-	return Helpers.GetTypeFromValues(self.Type, self.Values)
+function Animation:getValue(): Types.AnimatableType
+	return Helpers.GetTypeFromValues(self.type, self.values)
 end
 
-function Animation:Stop()
-	local lastPosition = self.LastPosition
-	local lastVelocity = self.LastVelocity
-	local values = self.Values
-	local velocity0 = self.Velocity0
+function Animation:stop()
+	local lastPosition = self.lastPosition
+	local lastVelocity = self.lastVelocity
+	local values = self.values
+	local velocity0 = self.velocity0
 
 	local length = #values
 	for index, value in values do
@@ -101,8 +101,8 @@ function Animation:Stop()
 		lastVelocity[index] = nil
 		velocity0[index] = nil
 
-		self.DurationProgress = table.create(length, 0)
-		self.ElapsedTime = table.create(length, 0)
+		self.durationProgress = table.create(length, 0)
+		self.elapsedTime = table.create(length, 0)
 	end
 end
 

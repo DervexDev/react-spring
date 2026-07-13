@@ -38,6 +38,9 @@ local ReactSpring = table.freeze({
 	EasingFunctions = Constants.EasingFunctions,
 	Easings = Constants.EasingFunctions,
 
+	config = Constants.Config,
+	easings = Constants.EasingFunctions,
+
 	Controller = Controller,
 
 	Parallax = Parallax,

@@ -13,12 +13,12 @@ local DOUBLE_TAU = TAU * 2
 export type SpringConfiguration = Types.SpringConfiguration
 export type PartialSpringConfiguration = Types.PartialSpringConfiguration
 
-local DEFAULTS: SpringConfiguration = table.freeze(FastMerge(Constants.Config.Default, {
-	Mass = 1,
-	DampingRatio = 1,
-	Clamp = false,
-	Velocity = 0,
-	EasingFunction = Constants.EasingFunctions.Smoother,
+local DEFAULTS: SpringConfiguration = table.freeze(FastMerge(Constants.Config.default, {
+	mass = 1,
+	damping = 1,
+	clamp = false,
+	velocity = 0,
+	easing = Constants.EasingFunctions.Smoother,
 }))
 
 function AnimationConfiguration.MergeConfiguration(configuration: any, newConfiguration: any?)
@@ -31,22 +31,22 @@ function AnimationConfiguration.MergeConfiguration(configuration: any, newConfig
 		end
 	end
 
-	local frequency = trueConfiguration.Frequency
+	local frequency = trueConfiguration.frequency
 	if frequency then
-		local mass = trueConfiguration.Mass
+		local mass = trueConfiguration.mass
 		if frequency < 0.01 then
 			frequency = 0.01
-			trueConfiguration.Frequency = frequency
+			trueConfiguration.frequency = frequency
 		end
 
-		local dampingRatio = trueConfiguration.DampingRatio
+		local dampingRatio = trueConfiguration.damping
 		if dampingRatio < 0 then
 			dampingRatio = 0
-			trueConfiguration.DampingRatio = dampingRatio
+			trueConfiguration.damping = dampingRatio
 		end
 
-		trueConfiguration.Tension = (TAU / frequency) ^ 2 * mass
-		trueConfiguration.Friction = DOUBLE_TAU * dampingRatio * mass / frequency
+		trueConfiguration.tension = (TAU / frequency) ^ 2 * mass
+		trueConfiguration.friction = DOUBLE_TAU * dampingRatio * mass / frequency
 	end
 
 	return trueConfiguration

@@ -10,20 +10,20 @@ local ParentContext = require(script.Parent.ParentContext)
 local function ParallaxLayer(properties: ParallaxTypes.ParallaxLayerProperties, reference: any)
 	local layerProperties: any = table.clone(properties)
 
-	local horizontal = layerProperties.Horizontal
-	layerProperties.Horizontal = nil
+	local horizontal = layerProperties.horizontal
+	layerProperties.horizontal = nil
 
-	local factor = layerProperties.Factor or 1
-	layerProperties.Factor = nil
+	local factor = layerProperties.factor or 1
+	layerProperties.factor = nil
 
-	local offset = layerProperties.Offset or 0
-	layerProperties.Offset = nil
+	local offset = layerProperties.offset or 0
+	layerProperties.offset = nil
 
-	local speed = layerProperties.Speed or 0
-	layerProperties.Speed = nil
+	local speed = layerProperties.speed or 0
+	layerProperties.speed = nil
 
-	local sticky = layerProperties.Sticky
-	layerProperties.Sticky = nil
+	local sticky = layerProperties.sticky
+	layerProperties.sticky = nil
 
 	local children = layerProperties.children
 	layerProperties.children = nil
@@ -35,15 +35,15 @@ local function ParallaxLayer(properties: ParallaxTypes.ParallaxLayerProperties, 
 		local translate: number
 		if sticky then
 			local start = sticky.start or 0
-			translate = start * parent.Space
+			translate = start * parent.space
 		else
-			local targetScroll = math.floor(offset) * parent.Space
-			local distance = parent.Space * offset + targetScroll * speed
-			translate = -(parent.Current * speed) + distance
+			local targetScroll = math.floor(offset) * parent.space
+			local distance = parent.space * offset + targetScroll * speed
+			translate = -(parent.current * speed) + distance
 		end
 
 		return Controller.new({
-			Space = if sticky then parent.Space else parent.Space * factor,
+			space = if sticky then parent.space else parent.space * factor,
 			Translate = translate,
 		})
 	end, {})
@@ -52,29 +52,29 @@ local function ParallaxLayer(properties: ParallaxTypes.ParallaxLayerProperties, 
 
 	local layer = React.useMemo(function(): ParallaxTypes.ParallaxLayer
 		return {
-			Horizontal = if horizontal == nil or sticky then parent.Horizontal else horizontal,
-			Sticky = nil,
-			IsSticky = false,
+			horizontal = if horizontal == nil or sticky then parent.horizontal else horizontal,
+			sticky = nil,
+			isSticky = false,
 
-			SetPosition = function(height, scrollTop, immediate)
+			setPosition = function(height, scrollTop, immediate)
 				if sticky then
 					setSticky(height, scrollTop)
 				else
 					local targetScroll = math.floor(offset) * height
 					local distance = height * offset + targetScroll * speed
-					api:Start({
-						Configuration = parent.Configuration,
-						Immediate = immediate,
+					api:start({
+						config = parent.config,
+						immediate = immediate,
 						Translate = -(scrollTop * speed) + distance,
 					} :: any)
 				end
 			end,
 
-			SetHeight = function(height, immediate)
-				api:Start({
-					Configuration = parent.Configuration,
-					Immediate = immediate,
-					Space = if sticky then height else height * factor,
+			setHeight = function(height, immediate)
+				api:start({
+					config = parent.config,
+					immediate = immediate,
+					space = if sticky then height else height * factor,
 				})
 			end,
 		}
@@ -83,11 +83,11 @@ local function ParallaxLayer(properties: ParallaxTypes.ParallaxLayerProperties, 
 	-- TODO: useOnce
 	local function updateStickyEffect()
 		if sticky then
-			local start = sticky.Start or 0
-			local finish = sticky.Finish or start + 1
-			layer.Sticky = {
-				Finish = finish,
-				Start = start,
+			local start = sticky.start or 0
+			local finish = sticky.finish or start + 1
+			layer.sticky = {
+				finish = finish,
+				start = start,
 			}
 		end
 	end
@@ -98,10 +98,10 @@ local function ParallaxLayer(properties: ParallaxTypes.ParallaxLayerProperties, 
 	end)
 
 	setSticky = function(height: number, scrollTop: number)
-		local start = layer.Sticky and layer.Sticky.Start and layer.Sticky.Start * height
-		local finish = layer.Sticky and layer.Sticky.Finish and layer.Sticky.Finish * height
+		local start = layer.sticky and layer.sticky.start and layer.sticky.start * height
+		local finish = layer.sticky and layer.sticky.finish and layer.sticky.finish * height
 		if start and finish then
-			layer.IsSticky = scrollTop >= start and scrollTop <= finish
+			layer.isSticky = scrollTop >= start and scrollTop <= finish
 
 			-- DEVIATION: Since `sticky` is not natively supported, we must manually set the position of the sticky layer every time
 			-- the scroll position changes
@@ -118,23 +118,23 @@ local function ParallaxLayer(properties: ParallaxTypes.ParallaxLayerProperties, 
 			return
 		end
 
-		parent.Layers:add(layer)
-		parent.Update()
+		parent.layers:add(layer)
+		parent.update()
 		return function()
-			parent.Layers:delete(layer)
-			parent.Update()
+			parent.layers:delete(layer)
+			parent.update()
 		end
 	end
 	React.useEffect(updateParentEffect, {})
 
-	api:Start({ Translate = 0 })
+	api:start({ Translate = 0 })
 
 	layerProperties.BackgroundTransparency = 1
 	layerProperties.Position = (if sticky then stickyTranslate else styles.Translate):map(function(value)
-		return if layer.Horizontal then UDim2.fromOffset(value, 0) else UDim2.fromOffset(0, value)
+		return if layer.horizontal then UDim2.fromOffset(value, 0) else UDim2.fromOffset(0, value)
 	end)
-	layerProperties.Size = styles.Space:map(function(value)
-		return if layer.Horizontal then UDim2.new(0, value, 1, 0) else UDim2.new(1, 0, 0, value)
+	layerProperties.Size = styles.space:map(function(value)
+		return if layer.horizontal then UDim2.new(0, value, 1, 0) else UDim2.new(1, 0, 0, value)
 	end)
 	layerProperties.ref = reference
 	return React.createElement("Frame", layerProperties, children)

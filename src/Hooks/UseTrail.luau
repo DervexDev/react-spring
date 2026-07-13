@@ -10,7 +10,7 @@ local UseSprings = require(script.Parent.UseSprings)
 type UseTrailProperties<T> =
 	{ Controller.ControllerProperties<T> }
 	| ((index: number) -> Controller.ControllerProperties<T>)
-local DEFAULT_DELAY = { Delay = 0.1 }
+local DEFAULT_DELAY = { delay = 0.1 }
 
 local Hooks = {
 	UseRef = React.useRef :: <T>(InitialValue: T) -> { current: T },
@@ -26,8 +26,8 @@ local function UseTrail<T>(length: number, properties: UseTrailProperties<T>, de
 		local currentDelay = 0
 		for index, value in properties do
 			local merged = FastMerge(DEFAULT_DELAY, value) :: any
-			local delayAmount = merged.Delay
-			merged.Delay = currentDelay
+			local delayAmount = merged.delay
+			merged.delay = currentDelay
 			currentDelay += delayAmount
 			newProperties[index] = merged
 		end
@@ -42,13 +42,13 @@ local function UseTrail<T>(length: number, properties: UseTrailProperties<T>, de
 		table.clear(modifiedApi.current)
 		modifiedApi.current = table.clone(api :: never)
 
-		function modifiedApi.current.Start(startFunction)
+		function modifiedApi.current.start(startFunction)
 			local currentDelay = 0
-			return api.Start(function(index)
+			return api.start(function(index)
 				local startProperties = FastMerge(DEFAULT_DELAY, startFunction(index))
-				local delay = startProperties.Delay :: number
+				local delay = startProperties.delay :: number
 
-				startProperties.Delay = currentDelay
+				startProperties.delay = currentDelay
 				currentDelay += delay
 				return startProperties :: any
 			end)

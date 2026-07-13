@@ -11,9 +11,9 @@ local Types = require(script.Parent.Parent.Types)
 type ControllerProperties<T> = Controller.ControllerProperties<T>
 export type UseSpringsStylesList = { { [string]: React.Binding<any> } }
 export type UseSpringsApi<T> = {
-	Pause: (keys: { string }?) -> (),
-	Start: (callback: (index: number) -> ControllerProperties<T>) -> Promise.Promise,
-	Stop: (keys: { string }?) -> (),
+	pause: (keys: { string }?) -> (),
+	start: (callback: (index: number) -> ControllerProperties<T>) -> Promise.Promise,
+	stop: (keys: { string }?) -> (),
 }
 
 local Hooks = {
@@ -61,10 +61,10 @@ local function UseSprings<T>(
 		if isImperative.current == false and type(properties) == "table" then
 			for index, spring in controls do
 				local startProperties = FastMerge(properties[index], {
-					Reset = not not (properties[index] :: any).Reset,
+					reset = not not (properties[index] :: any).reset,
 				})
 
-				spring:Start(FastMerge({ Default = true }, startProperties))
+				spring:start(FastMerge({ default = true }, startProperties))
 			end
 		end
 	end
@@ -84,7 +84,7 @@ local function UseSprings<T>(
 			end
 		else
 			for index = length + 1, #controls do
-				controls[index]:Stop()
+				controls[index]:stop()
 				controls[index] = nil
 
 				useSpringsStylesList[index] = nil
@@ -130,7 +130,7 @@ local function UseSprings<T>(
 	local function stopEffect()
 		return function()
 			for _, controller in controls do
-				controller:Stop()
+				controller:stop()
 			end
 		end
 	end

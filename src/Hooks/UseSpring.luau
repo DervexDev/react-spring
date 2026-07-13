@@ -8,9 +8,9 @@ local Controller = require(script.Parent.Parent.Controller)
 local UseSprings = require(script.Parent.UseSprings)
 
 export type UseSpringApi<T> = {
-	Start: (startProperties: Controller.ControllerProperties<T>) -> Promise.Promise,
-	Stop: (keys: { string }?) -> (),
-	Pause: (keys: { string }?) -> (),
+	start: (startProperties: Controller.ControllerProperties<T>) -> Promise.Promise,
+	stop: (keys: { string }?) -> (),
+	pause: (keys: { string }?) -> (),
 }
 
 type UseSpringDeclarative = <T>(

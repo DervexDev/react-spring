@@ -11,40 +11,40 @@ Constants.EasingFunctions = EasingFunctions
 Constants.Easings = EasingFunctions
 
 Constants.Config = {
-	Default = {
-		Friction = 26,
-		Tension = 170,
+	default = {
+		friction = 26,
+		tension = 170,
 	} :: Types.PartialSpringConfiguration,
 
-	Gentle = {
-		Friction = 14,
-		Tension = 120,
+	gentle = {
+		friction = 14,
+		tension = 120,
 	} :: Types.PartialSpringConfiguration,
 
-	Wobbly = {
-		Friction = 12,
-		Tension = 180,
+	wobbly = {
+		friction = 12,
+		tension = 180,
 	} :: Types.PartialSpringConfiguration,
 
-	Stiff = {
-		Friction = 20,
-		Tension = 210,
+	stiff = {
+		friction = 20,
+		tension = 210,
 	} :: Types.PartialSpringConfiguration,
 
-	Slow = {
-		Friction = 60,
-		Tension = 280,
+	slow = {
+		friction = 60,
+		tension = 280,
 	} :: Types.PartialSpringConfiguration,
 
-	Molasses = {
-		Friction = 120,
-		Tension = 280,
+	molasses = {
+		friction = 120,
+		tension = 280,
 	} :: Types.PartialSpringConfiguration,
 
-	Snappy = {
-		Friction = 20,
-		Mass = 0.5,
-		Tension = 400,
+	snappy = {
+		friction = 20,
+		mass = 0.5,
+		tension = 400,
 	} :: Types.PartialSpringConfiguration,
 }
 

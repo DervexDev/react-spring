@@ -31,15 +31,15 @@ local function Parallax(properties: ParallaxTypes.ParallaxProperties, reference:
 	end
 	React.useEffect(disconnectEffect, {})
 
-	local pages = properties.Pages
-	local configuration = properties.Configuration or Constants.Config.Default
-	local horizontal = properties.Horizontal or false
+	local pages = properties.pages
+	local configuration = properties.config or Constants.Config.default
+	local horizontal = properties.horizontal or false
 	local children = properties.children
 
 	local containerProperties: any = table.clone(properties)
-	containerProperties.Pages = nil
-	containerProperties.Configuration = nil
-	containerProperties.Horizontal = nil
+	containerProperties.pages = nil
+	containerProperties.config = nil
+	containerProperties.horizontal = nil
 	containerProperties.children = nil
 
 	local function update() end
@@ -48,25 +48,25 @@ local function Parallax(properties: ParallaxTypes.ParallaxProperties, reference:
 	local state = React.useMemo(function(): ParallaxTypes.Parallax
 		local styles, api = Controller.new({ Scroll = 0 })
 		return {
-			Configuration = configuration,
-			Horizontal = horizontal,
-			Busy = false,
-			Space = 0,
-			Current = 0,
-			Offset = 0,
-			Layers = Set.new(),
-			Container = containerReference,
-			Content = contentReference,
-			Update = function()
+			config = configuration,
+			horizontal = horizontal,
+			busy = false,
+			space = 0,
+			current = 0,
+			offset = 0,
+			layers = Set.new(),
+			container = containerReference,
+			content = contentReference,
+			update = function()
 				update()
 			end,
 
-			ScrollTo = function(offset)
+			scrollTo = function(offset)
 				scrollTo(offset)
 			end,
 
-			Stop = function()
-				api:Stop()
+			stop = function()
+				api:stop()
 			end,
 
 			_Api = api,
@@ -84,30 +84,30 @@ local function Parallax(properties: ParallaxTypes.ParallaxProperties, reference:
 			return
 		end
 
-		state.Space = if horizontal then container.AbsoluteSize.X else container.AbsoluteSize.Y
-		state.Current = if horizontal then container.CanvasPosition.X else container.CanvasPosition.Y
-		setContainerCanvasSize(pages * state.Space)
+		state.space = if horizontal then container.AbsoluteSize.X else container.AbsoluteSize.Y
+		state.current = if horizontal then container.CanvasPosition.X else container.CanvasPosition.Y
+		setContainerCanvasSize(pages * state.space)
 
 		local content = contentReference.current
 		if content then
 			content.Size = if horizontal
-				then UDim2.fromOffset(state.Space * pages, content.AbsoluteSize.Y)
-				else UDim2.fromOffset(content.AbsoluteSize.X, state.Space * pages)
+				then UDim2.fromOffset(state.space * pages, content.AbsoluteSize.Y)
+				else UDim2.fromOffset(content.AbsoluteSize.X, state.space * pages)
 		end
 
-		for _, layer in state.Layers do
-			layer.SetHeight(state.Space, true)
-			layer.SetPosition(state.Space, state.Current, true)
+		for _, layer in state.layers do
+			layer.setHeight(state.space, true)
+			layer.setPosition(state.space, state.current, true)
 		end
 	end
 
 	scrollTo = function(offset: number)
-		state.Offset = offset
+		state.offset = offset
 
 		state._Api
-			:Start({
-				Immediate = true,
-				Scroll = state.Current,
+			:start({
+				immediate = true,
+				Scroll = state.current,
 			})
 			:andThen(function()
 				-- DEVIATION: Chained to `andThen` because immediate currently only takes effect on the next frame
@@ -116,15 +116,15 @@ local function Parallax(properties: ParallaxTypes.ParallaxProperties, reference:
 				end
 
 				local connection = RunService.PostSimulation:Connect(function()
-					setScroll(state._Styles.Scroll:GetValue())
+					setScroll(state._Styles.Scroll:getValue())
 				end)
 
 				syncScrollConnection.current = connection
 
 				state._Api
-					:Start({
-						Configuration = configuration,
-						Scroll = offset * state.Space,
+					:start({
+						config = configuration,
+						Scroll = offset * state.space,
 					})
 					:andThen(function()
 						if syncScrollConnection.current and connection == syncScrollConnection.current then
@@ -140,19 +140,19 @@ local function Parallax(properties: ParallaxTypes.ParallaxProperties, reference:
 		-- DEVIATION: Track user manual scroll
 		setScroll(newScroll)
 
-		if not state.Busy then
-			state.Busy = true
-			state.Current = newScroll
-			for _, layer in state.Layers do
-				layer.SetPosition(state.Space, state.Current)
+		if not state.busy then
+			state.busy = true
+			state.current = newScroll
+			for _, layer in state.layers do
+				layer.setPosition(state.space, state.current)
 			end
 
-			state.Busy = false
+			state.busy = false
 		end
 	end
 
 	local function updateEffect()
-		state.Update()
+		state.update()
 	end
 	React.useEffect(updateEffect)
 
